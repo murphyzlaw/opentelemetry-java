@@ -23,6 +23,9 @@ import io.opentelemetry.correlationcontext.DefaultCorrelationContextManager;
 import io.opentelemetry.correlationcontext.DefaultCorrelationContextManagerProvider;
 import io.opentelemetry.correlationcontext.spi.CorrelationContextManagerProvider;
 import io.opentelemetry.internal.Utils;
+import io.opentelemetry.logging.DefaultLogProvider;
+import io.opentelemetry.logging.LogChannelProvider;
+import io.opentelemetry.logging.spi.LoggingProvider;
 import io.opentelemetry.metrics.DefaultMeterProvider;
 import io.opentelemetry.metrics.DefaultMetricsProvider;
 import io.opentelemetry.metrics.Meter;
@@ -57,6 +60,7 @@ public final class OpenTelemetry {
   private final TracerProvider tracerProvider;
   private final MeterProvider meterProvider;
   private final CorrelationContextManager contextManager;
+  private final LogChannelProvider loggerProvider;
 
   private volatile ContextPropagators propagators =
       DefaultContextPropagators.builder().addHttpTextFormat(new HttpTraceContext()).build();
@@ -157,6 +161,11 @@ public final class OpenTelemetry {
         contextManagerProvider != null
             ? contextManagerProvider.create()
             : DefaultCorrelationContextManagerProvider.getInstance().create();
+    LoggingProvider loggingProvider = loadSpi(LoggingProvider.class);
+    this.loggerProvider =
+       loggingProvider != null
+            ? loggingProvider.create()
+            : DefaultLogProvider.getInstance();
   }
 
   /**
@@ -187,5 +196,9 @@ public final class OpenTelemetry {
   // for testing
   static void reset() {
     instance = null;
+  }
+
+  public static LogChannelProvider getLogChannelProvider() {
+    return getInstance().loggerProvider;
   }
 }

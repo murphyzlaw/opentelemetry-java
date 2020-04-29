@@ -18,6 +18,7 @@ package io.opentelemetry.sdk;
 
 import io.opentelemetry.OpenTelemetry;
 import io.opentelemetry.sdk.correlationcontext.CorrelationContextManagerSdk;
+import io.opentelemetry.sdk.logging.SdkLogChannelProvider;
 import io.opentelemetry.sdk.metrics.MeterSdkProvider;
 import io.opentelemetry.sdk.trace.TracerSdkProvider;
 import javax.annotation.concurrent.ThreadSafe;
@@ -61,6 +62,10 @@ public final class OpenTelemetrySdk {
    */
   public static CorrelationContextManagerSdk getCorrelationContextManager() {
     return (CorrelationContextManagerSdk) OpenTelemetry.getCorrelationContextManager();
+  }
+
+  public static SdkLogChannelProvider getSdkLogChannelProvider() {
+      return (SdkLogChannelProvider) OpenTelemetry.getLogChannelProvider();
   }
 
   private OpenTelemetrySdk() {}
