@@ -23,6 +23,9 @@ import io.opentelemetry.correlationcontext.DefaultCorrelationContextManager;
 import io.opentelemetry.correlationcontext.spi.CorrelationContextManagerFactory;
 import io.opentelemetry.internal.Obfuscated;
 import io.opentelemetry.internal.Utils;
+import io.opentelemetry.logging.DefaultLogProvider;
+import io.opentelemetry.logging.LogChannelProvider;
+import io.opentelemetry.logging.spi.LoggingProvider;
 import io.opentelemetry.metrics.DefaultMeterProvider;
 import io.opentelemetry.metrics.Meter;
 import io.opentelemetry.metrics.MeterProvider;
@@ -55,6 +58,7 @@ public final class OpenTelemetry {
   private final TracerProvider tracerProvider;
   private final MeterProvider meterProvider;
   private final CorrelationContextManager contextManager;
+  private final LogChannelProvider loggerProvider;
 
   private volatile ContextPropagators propagators =
       DefaultContextPropagators.builder().addHttpTextFormat(new HttpTraceContext()).build();
@@ -215,7 +219,13 @@ public final class OpenTelemetry {
     contextManager =
         contextManagerProvider != null
             ? contextManagerProvider.create()
-            : DefaultCorrelationContextManager.getInstance();
+//            : DefaultCorrelationContextManager.getInstance();
+            : DefaultCorrelationContextManagerProvider.getInstance().create();
+    LoggingProvider loggingProvider = loadSpi(LoggingProvider.class);
+    this.loggerProvider =
+       loggingProvider != null
+            ? loggingProvider.create()
+            : DefaultLogProvider.getInstance();
   }
 
   /**
@@ -248,6 +258,8 @@ public final class OpenTelemetry {
     instance = null;
   }
 
+  public static LogChannelProvider getLogChannelProvider() {
+    return getInstance().loggerProvider;
   /**
    * A {@link TracerProvider} wrapper that forces users to access the SDK specific implementation
    * via the SDK, instead of via the API and casting it to the SDK specific implementation.

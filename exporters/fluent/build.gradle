@@ -1,0 +1,27 @@
+plugins {
+    id "java"
+    id "maven-publish"
+
+    id "ru.vyarus.animalsniffer"
+}
+
+description = 'OpenTelemetry - Fluentd/Fluent-Bit Exporter'
+ext.moduleName = "io.opentelemetry.exporters.fluent"
+
+dependencies {
+    api project(':opentelemetry-sdk')
+
+    implementation "org.komamitsu:fluency-core:2.3.2"
+    implementation "org.komamitsu:fluency-fluentd:2.3.2"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.10.0"
+
+    signature "org.codehaus.mojo.signature:java17:1.0@signature"
+    signature "net.sf.androidscents.signature:android-api-level-24:7.0_r2@signature"
+}
+
+animalsniffer {
+    // Don't check sourceSets.jmh and sourceSets.test
+    sourceSets = [
+            sourceSets.main
+    ]
+}
