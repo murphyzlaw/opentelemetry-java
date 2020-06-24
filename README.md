@@ -6,6 +6,20 @@
 
 We hold regular meetings. See details at [community page](https://github.com/open-telemetry/community#java-sdk).
 
+## RON'S NOTES ON BUILDING LOGGING POC
+Ensure you are on branch: PROTO_ot_logging_2020_04
+
+Run the following:
+
+```
+make init-git-submodules
+./gradlew goJF
+make test verify-format
+./gradlew publishToMavenLocal
+```
+
+Note: when doing the main build (`make test verify-format`), you must be disconnected from VPN in order to get the remote Artifactory Maven artifacts; or you must have Walmart proxy set up to access the Artifactory Maven repo from inside Walmart.
+
 ## Overview
 
 OpenTelemetry is a working name of a combined OpenCensus and OpenTracing
