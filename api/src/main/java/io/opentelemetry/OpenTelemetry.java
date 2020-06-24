@@ -219,7 +219,6 @@ public final class OpenTelemetry {
     contextManager =
         contextManagerProvider != null
             ? contextManagerProvider.create()
-//            : DefaultCorrelationContextManager.getInstance();
             : DefaultCorrelationContextManagerProvider.getInstance().create();
     LoggingProvider loggingProvider = loadSpi(LoggingProvider.class);
     this.loggerProvider =
@@ -260,6 +259,8 @@ public final class OpenTelemetry {
 
   public static LogChannelProvider getLogChannelProvider() {
     return getInstance().loggerProvider;
+  }
+
   /**
    * A {@link TracerProvider} wrapper that forces users to access the SDK specific implementation
    * via the SDK, instead of via the API and casting it to the SDK specific implementation.
