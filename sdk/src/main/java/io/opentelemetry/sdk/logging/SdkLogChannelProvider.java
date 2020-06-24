@@ -43,6 +43,11 @@ public class SdkLogChannelProvider implements LogChannelProvider, BatchResponder
         return new SdkLogger();
     }
 
+    /**
+     * Set the batcher to be used by this provider.
+     *
+     * @param batcher the batcher.
+     */
     public void setBatcher(LoggingBatcher batcher) {
         LoggingBatcher oldBatcher = this.batcher;
         this.batcher = batcher;
@@ -51,6 +56,10 @@ public class SdkLogChannelProvider implements LogChannelProvider, BatchResponder
         this.batcher.start(this);
     }
 
+    /**
+     * Add a logging exporter into this log channel provider.
+     * @param exporter the logging exporter.
+     */
     public void addLoggingExporter(LoggingExporter exporter) {
         exporters.add(exporter);
     }

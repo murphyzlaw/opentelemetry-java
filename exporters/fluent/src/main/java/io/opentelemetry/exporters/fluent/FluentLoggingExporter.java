@@ -39,6 +39,10 @@ public class FluentLoggingExporter implements LoggingExporter {
         private int port;
         private String host;
 
+        /**
+         * Creates a new Builder using environment variables for configuring fluent daemon host/port
+         * address.
+         */
         public static Builder fromEnv() {
             Builder builder = new Builder();
             builder.port = DEFAULT_FLUENTD_PORT;
@@ -55,12 +59,21 @@ public class FluentLoggingExporter implements LoggingExporter {
             return builder;
         }
 
+        /**
+         * Initializes the builder and returns a FluentLoggingExporter.
+         *
+         * @return the FluentLoggingExporter
+         */
         public FluentLoggingExporter build() {
             FluencyBuilderForFluentd builder = new FluencyBuilderForFluentd();
             builder.setSslEnabled(sslEnabled);
             return new FluentLoggingExporter(builder.build(host, port));
         }
 
+        /**
+         * Builds and sets a FluentLoggingExporter into the given log channel provider.
+         * @param provider the log channel provider.
+         */
         public void install(SdkLogChannelProvider provider) {
             provider.addLoggingExporter(build());
         }
