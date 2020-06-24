@@ -219,12 +219,10 @@ public final class OpenTelemetry {
     contextManager =
         contextManagerProvider != null
             ? contextManagerProvider.create()
-            : DefaultCorrelationContextManagerProvider.getInstance().create();
+            : DefaultCorrelationContextManager.getInstance();
     LoggingProvider loggingProvider = loadSpi(LoggingProvider.class);
     this.loggerProvider =
-       loggingProvider != null
-            ? loggingProvider.create()
-            : DefaultLogProvider.getInstance();
+        loggingProvider != null ? loggingProvider.create() : DefaultLogProvider.getInstance();
   }
 
   /**
